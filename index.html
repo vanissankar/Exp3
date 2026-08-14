@@ -4,57 +4,1387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Validation</title>
+
+    <title>Login | Form Validation</title>
+
+    <style>
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4facfe,
+                    #00f2fe
+                );
+
+            position: relative;
+        }
+
+
+        /* =========================
+           ANIMATED SKY
+        ========================= */
+
+        .sky {
+            position: absolute;
+            inset: 0;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    #4facfe 0%,
+                    #87ceeb 50%,
+                    #dff6ff 100%
+                );
+
+            z-index: -5;
+        }
+
+
+        /* =========================
+           SUN
+        ========================= */
+
+        .sun {
+            position: absolute;
+
+            width: 130px;
+            height: 130px;
+
+            border-radius: 50%;
+
+            background: #fff59d;
+
+            top: 70px;
+            right: 12%;
+
+            box-shadow:
+                0 0 40px #fff176,
+                0 0 80px rgba(255, 241, 118, 0.7);
+
+            animation: sunGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes sunGlow {
+
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.08);
+            }
+        }
+
+
+        /* =========================
+           CLOUD
+        ========================= */
+
+        .cloud {
+            position: absolute;
+
+            width: 180px;
+            height: 55px;
+
+            background: rgba(255, 255, 255, 0.85);
+
+            border-radius: 50px;
+
+            filter: blur(1px);
+
+            animation: moveCloud linear infinite;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: "";
+
+            position: absolute;
+
+            background: rgba(255, 255, 255, 0.85);
+
+            border-radius: 50%;
+        }
+
+        .cloud::before {
+            width: 80px;
+            height: 80px;
+
+            left: 25px;
+            bottom: 10px;
+        }
+
+        .cloud::after {
+            width: 100px;
+            height: 100px;
+
+            right: 25px;
+            bottom: 5px;
+        }
+
+
+        /* Cloud positions */
+
+        .cloud1 {
+            top: 12%;
+            left: -220px;
+
+            transform: scale(1.1);
+
+            animation-duration: 35s;
+        }
+
+        .cloud2 {
+            top: 28%;
+            left: -250px;
+
+            transform: scale(0.7);
+
+            animation-duration: 45s;
+
+            animation-delay: 5s;
+        }
+
+        .cloud3 {
+            top: 48%;
+            left: -300px;
+
+            transform: scale(1.3);
+
+            animation-duration: 55s;
+
+            animation-delay: 10s;
+        }
+
+        .cloud4 {
+            top: 70%;
+            left: -200px;
+
+            transform: scale(0.8);
+
+            animation-duration: 40s;
+
+            animation-delay: 15s;
+        }
+
+
+        @keyframes moveCloud {
+
+            from {
+                transform:
+                    translateX(-250px)
+                    scale(1);
+            }
+
+            to {
+                transform:
+                    translateX(calc(100vw + 400px))
+                    scale(1);
+            }
+        }
+
+
+        /* =========================
+           FLOATING PARTICLES
+        ========================= */
+
+        .particle {
+            position: absolute;
+
+            width: 5px;
+            height: 5px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            opacity: 0.5;
+
+            animation:
+                floatParticle
+                linear infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 10%;
+            bottom: -20px;
+            animation-duration: 10s;
+        }
+
+        .particle:nth-child(2) {
+            left: 25%;
+            bottom: -20px;
+            animation-duration: 14s;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            left: 50%;
+            bottom: -20px;
+            animation-duration: 12s;
+            animation-delay: 4s;
+        }
+
+        .particle:nth-child(4) {
+            left: 70%;
+            bottom: -20px;
+            animation-duration: 16s;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(5) {
+            left: 90%;
+            bottom: -20px;
+            animation-duration: 11s;
+            animation-delay: 3s;
+        }
+
+
+        @keyframes floatParticle {
+
+            from {
+                transform:
+                    translateY(0)
+                    scale(1);
+
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0.6;
+            }
+
+            to {
+                transform:
+                    translateY(-110vh)
+                    scale(1.5);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* =========================
+           LOGIN CONTAINER
+        ========================= */
+
+        .login-container {
+
+            width: 420px;
+            max-width: 90%;
+
+            padding: 40px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(255, 255, 255, 0.22);
+
+            backdrop-filter: blur(18px);
+
+            -webkit-backdrop-filter: blur(18px);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.45);
+
+            box-shadow:
+                0 25px 60px
+                rgba(0, 0, 0, 0.2);
+
+            animation:
+                cardAppear
+                0.8s ease;
+        }
+
+
+        @keyframes cardAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(50px)
+                    scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        /* =========================
+           LOGIN HEADER
+        ========================= */
+
+        .login-header {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .login-icon {
+
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 15px;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255, 255, 255, 0.35);
+
+            font-size: 35px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.1);
+
+            animation:
+                floatingIcon
+                3s ease-in-out infinite;
+        }
+
+
+        @keyframes floatingIcon {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+
+        .login-header h1 {
+
+            color: white;
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+
+            text-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, 0.15);
+        }
+
+        .login-header p {
+
+            color: rgba(255, 255, 255, 0.85);
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           FORM GROUP
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 22px;
+
+            position: relative;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            color: white;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           INPUT
+        ========================= */
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 18px;
+
+            opacity: 0.7;
+        }
+
+
+        .input-wrapper input {
+
+            width: 100%;
+
+            padding: 14px 45px;
+
+            border: none;
+
+            outline: none;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255, 255, 255, 0.85);
+
+            color: #333;
+
+            font-size: 15px;
+
+            border:
+                2px solid
+                transparent;
+
+            transition: 0.3s;
+        }
+
+
+        .input-wrapper input:focus {
+
+            background: white;
+
+            border-color: #2196f3;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(33, 150, 243, 0.15);
+        }
+
+
+        .input-wrapper input::placeholder {
+            color: #999;
+        }
+
+
+        /* =========================
+           PASSWORD BUTTON
+        ========================= */
+
+        .toggle-password {
+
+            position: absolute;
+
+            right: 15px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: none;
+
+            cursor: pointer;
+
+            font-size: 17px;
+
+            opacity: 0.6;
+        }
+
+
+        .toggle-password:hover {
+            opacity: 1;
+        }
+
+
+        /* =========================
+           VALIDATION MESSAGE
+        ========================= */
+
+        .error {
+
+            color: #ffebee;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+
+            display: none;
+        }
+
+
+        .input-wrapper.invalid input {
+
+            border-color: #ff5252;
+
+            animation:
+                shake
+                0.3s;
+        }
+
+
+        .input-wrapper.valid input {
+
+            border-color: #4caf50;
+        }
+
+
+        .input-wrapper.invalid .error {
+            display: block;
+        }
+
+
+        @keyframes shake {
+
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+
+        /* =========================
+           OPTIONS
+        ========================= */
+
+        .options {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            color: white;
+
+            font-size: 13px;
+        }
+
+
+        .remember {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+        }
+
+
+        .remember input {
+            accent-color: #2196f3;
+        }
+
+
+        .forgot {
+
+            color: white;
+
+            text-decoration: none;
+        }
+
+
+        .forgot:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           SUBMIT BUTTON
+        ========================= */
+
+        .submit-btn {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2196f3,
+                    #1565c0
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px
+                rgba(21, 101, 192, 0.3);
+
+            transition: 0.3s;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .submit-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(21, 101, 192, 0.4);
+        }
+
+
+        .submit-btn:active {
+            transform: scale(0.97);
+        }
+
+
+        /* Button shine */
+
+        .submit-btn::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 50%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.4),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: 0.5s;
+        }
+
+
+        .submit-btn:hover::before {
+            left: 130%;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .signup {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: rgba(255,255,255,0.9);
+
+            font-size: 13px;
+        }
+
+
+        .signup a {
+
+            color: white;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           SUCCESS MESSAGE
+        ========================= */
+
+        .success {
+
+            position: fixed;
+
+            top: 25px;
+
+            right: 25px;
+
+            padding: 15px 25px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(46, 125, 50, 0.95);
+
+            color: white;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.2);
+
+            transform:
+                translateX(150%);
+
+            transition: 0.5s;
+
+            z-index: 20;
+        }
+
+
+        .success.show {
+
+            transform:
+                translateX(0);
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .login-container {
+
+                padding: 30px 22px;
+
+                border-radius: 20px;
+            }
+
+            .login-header h1 {
+                font-size: 25px;
+            }
+
+            .sun {
+
+                width: 90px;
+                height: 90px;
+
+                right: 5%;
+                top: 40px;
+            }
+
+            .options {
+                font-size: 12px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <form onsubmit="return validate()">
 
-        <label for="name">Name:</label>
-        <input type="text" id="name">
+    <!-- =========================
+         ANIMATED BACKGROUND
+    ========================== -->
 
-        <br><br>
+    <div class="sky">
 
-        <label for="email">Email:</label>
-        <input type="text" id="email">
+        <div class="sun"></div>
 
-        <br><br>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+        <div class="cloud cloud4"></div>
 
-        <button type="submit">Submit</button>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
 
-    </form>
+    </div>
+
+
+    <!-- =========================
+         LOGIN FORM
+    ========================== -->
+
+    <div class="login-container">
+
+        <div class="login-header">
+
+            <div class="login-icon">
+                🔐
+            </div>
+
+            <h1>Welcome Back</h1>
+
+            <p>
+                Login to continue to your account
+            </p>
+
+        </div>
+
+
+        <form
+            id="loginForm"
+            onsubmit="return validate()"
+        >
+
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <div
+                    class="input-wrapper"
+                    id="nameWrapper"
+                >
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your name"
+                    >
+
+                    <div class="error">
+                        Please enter your name
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <div
+                    class="input-wrapper"
+                    id="emailWrapper"
+                >
+
+                    <span class="input-icon">
+                        ✉️
+                    </span>
+
+                    <input
+                        type="text"
+                        id="email"
+                        placeholder="name@gmail.com"
+                    >
+
+                    <div class="error">
+                        Please enter a valid Gmail or KSRCE email
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div
+                    class="input-wrapper"
+                    id="passwordWrapper"
+                >
+
+                    <span class="input-icon">
+                        🔑
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword()"
+                    >
+                        👁️
+                    </button>
+
+                    <div class="error">
+                        Password must contain at least 6 characters
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPTIONS -->
+
+            <div class="options">
+
+                <label class="remember">
+
+                    <input
+                        type="checkbox"
+                    >
+
+                    Remember me
+
+                </label>
+
+                <a
+                    href="#"
+                    class="forgot"
+                >
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                Login
+            </button>
+
+
+            <div class="signup">
+
+                Don't have an account?
+
+                <a href="#">
+                    Sign up
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- SUCCESS -->
+
+    <div
+        class="success"
+        id="successMessage"
+    >
+        ✓ Login successful!
+    </div>
+
 
     <script>
 
+        /* =========================
+           FORM VALIDATION
+        ========================== */
+
         function validate() {
 
-            let name = document.getElementById("name").value.trim();
-            let email = document.getElementById("email").value.trim();
+            let name =
+                document
+                .getElementById("name")
+                .value
+                .trim();
 
-            // Check empty fields
-            if (name === "" || email === "") {
+            let email =
+                document
+                .getElementById("email")
+                .value
+                .trim();
 
-                alert("All fields are required");
+            let password =
+                document
+                .getElementById("password")
+                .value;
 
-                return false;
+
+            let valid = true;
+
+
+            /* -------------------------
+               NAME
+            ------------------------- */
+
+            let nameWrapper =
+                document
+                .getElementById("nameWrapper");
+
+
+            nameWrapper.classList.remove(
+                "invalid",
+                "valid"
+            );
+
+
+            if (name === "") {
+
+                nameWrapper.classList.add(
+                    "invalid"
+                );
+
+                valid = false;
+
+            } else {
+
+                nameWrapper.classList.add(
+                    "valid"
+                );
             }
 
-            // Check email format and allowed domains
-            let emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|ksrce\.ac\.in)$/;
+
+            /* -------------------------
+               EMAIL
+            ------------------------- */
+
+            let emailWrapper =
+                document
+                .getElementById("emailWrapper");
+
+
+            emailWrapper.classList.remove(
+                "invalid",
+                "valid"
+            );
+
+
+            /*
+                Only these two domains
+                are allowed.
+            */
+
+            let emailPattern =
+                /^[a-zA-Z0-9._%+-]+@(gmail\.com|ksrce\.ac\.in)$/;
+
 
             if (!emailPattern.test(email)) {
 
-                alert("Please enter a valid Gmail or KSRCE email address\n\nExample:\nname@gmail.com\nname@ksrce.ac.in");
+                emailWrapper.classList.add(
+                    "invalid"
+                );
+
+                valid = false;
+
+            } else {
+
+                emailWrapper.classList.add(
+                    "valid"
+                );
+            }
+
+
+            /* -------------------------
+               PASSWORD
+            ------------------------- */
+
+            let passwordWrapper =
+                document
+                .getElementById("passwordWrapper");
+
+
+            passwordWrapper.classList.remove(
+                "invalid",
+                "valid"
+            );
+
+
+            if (password.length < 6) {
+
+                passwordWrapper.classList.add(
+                    "invalid"
+                );
+
+                valid = false;
+
+            } else {
+
+                passwordWrapper.classList.add(
+                    "valid"
+                );
+            }
+
+
+            /* -------------------------
+               RESULT
+            ------------------------- */
+
+            if (!valid) {
 
                 return false;
             }
 
-            // Successful submission
-            alert("Form submitted successfully");
 
-            return true;
+            /*
+                Show success message
+            */
+
+            let success =
+                document
+                .getElementById(
+                    "successMessage"
+                );
+
+
+            success.classList.add("show");
+
+
+            /*
+                Prevent actual form submission
+                for demonstration.
+            */
+
+            setTimeout(() => {
+
+                success.classList.remove(
+                    "show"
+                );
+
+            }, 3000);
+
+
+            return false;
         }
+
+
+        /* =========================
+           PASSWORD SHOW / HIDE
+        ========================== */
+
+        function togglePassword() {
+
+            let password =
+                document
+                .getElementById("password");
+
+
+            let button =
+                document
+                .querySelector(
+                    ".toggle-password"
+                );
+
+
+            if (
+                password.type ===
+                "password"
+            ) {
+
+                password.type =
+                    "text";
+
+                button.textContent =
+                    "🙈";
+
+            } else {
+
+                password.type =
+                    "password";
+
+                button.textContent =
+                    "👁️";
+            }
+        }
+
+
+        /* =========================
+           REAL-TIME VALIDATION
+        ========================== */
+
+        document
+        .getElementById("name")
+        .addEventListener(
+            "input",
+            function () {
+
+                let wrapper =
+                    document
+                    .getElementById(
+                        "nameWrapper"
+                    );
+
+                if (
+                    this.value.trim() !== ""
+                ) {
+
+                    wrapper.classList.remove(
+                        "invalid"
+                    );
+
+                    wrapper.classList.add(
+                        "valid"
+                    );
+
+                } else {
+
+                    wrapper.classList.remove(
+                        "valid"
+                    );
+                }
+            }
+        );
+
+
+        document
+        .getElementById("email")
+        .addEventListener(
+            "input",
+            function () {
+
+                let wrapper =
+                    document
+                    .getElementById(
+                        "emailWrapper"
+                    );
+
+                let pattern =
+                    /^[a-zA-Z0-9._%+-]+@(gmail\.com|ksrce\.ac\.in)$/;
+
+
+                if (
+                    pattern.test(
+                        this.value.trim()
+                    )
+                ) {
+
+                    wrapper.classList.remove(
+                        "invalid"
+                    );
+
+                    wrapper.classList.add(
+                        "valid"
+                    );
+
+                } else {
+
+                    wrapper.classList.remove(
+                        "valid"
+                    );
+                }
+            }
+        );
+
+
+        document
+        .getElementById("password")
+        .addEventListener(
+            "input",
+            function () {
+
+                let wrapper =
+                    document
+                    .getElementById(
+                        "passwordWrapper"
+                    );
+
+
+                if (
+                    this.value.length >= 6
+                ) {
+
+                    wrapper.classList.remove(
+                        "invalid"
+                    );
+
+                    wrapper.classList.add(
+                        "valid"
+                    );
+
+                } else {
+
+                    wrapper.classList.remove(
+                        "valid"
+                    );
+                }
+            }
+        );
 
     </script>
 
